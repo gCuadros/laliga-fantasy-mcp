@@ -1,8 +1,8 @@
 /**
- * Lógica de negocio: tendencias, ratios, chollos (Fase 3).
+ * Business logic: trends, ratios, bargains.
  *
- * Independiente del protocolo MCP a propósito — es la capa que se reutiliza fuera del
- * servidor. No puede importar de `tools/` (lo comprueba eslint).
+ * Deliberately independent of the MCP protocol — this is the layer reused outside the
+ * server. It must not import from `tools/` (enforced by eslint).
  */
 
 export { buildHealthReport } from './health.js';

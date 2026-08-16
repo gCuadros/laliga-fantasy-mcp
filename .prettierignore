@@ -3,3 +3,6 @@ coverage
 node_modules
 package-lock.json
 .tokensave
+
+# Local working notes must not fail `prettier --check`.
+*.local.md

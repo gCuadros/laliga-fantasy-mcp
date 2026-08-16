@@ -1,8 +1,11 @@
 /**
- * Informe de estado del servidor, en texto compacto.
+ * Server status report, as compact text.
  *
- * `domain/` no conoce el protocolo MCP: esta función es pura y recibe un snapshot ya
- * recolectado, de modo que se pueda reutilizar fuera del servidor (bot de datos).
+ * `domain/` knows nothing about the MCP protocol: this function is pure and takes an
+ * already-collected snapshot, so it can be reused outside the server.
+ *
+ * User-facing strings are Spanish on purpose — the audience is Spanish-speaking LaLiga
+ * Fantasy managers. See AGENTS.md section 6.
  */
 
 import type { CredentialsStatus } from '../auth/index.js';
@@ -15,14 +18,14 @@ export interface HealthSnapshot {
   readonly host: HostSelection;
   readonly credentials: CredentialsStatus;
   readonly writesEnabled: boolean;
-  /** `true` cuando `docs/API.md` ya tiene endpoints verificados (Fase 0 cerrada). */
+  /** `true` once `docs/API.md` holds verified endpoints. */
   readonly apiContractVerified: boolean;
 }
 
 function describeHost(host: HostSelection): string {
   if (host.configured) {
-    const origen = host.alias === null ? 'valor explícito' : `alias "${host.alias}"`;
-    return `${host.host} (${origen}, sin verificar)`;
+    const origin = host.alias === null ? 'valor explícito' : `alias "${host.alias}"`;
+    return `${host.host} (${origin}, sin verificar)`;
   }
   if (host.reason === 'invalid') {
     return 'valor no válido en FANTASY_API_HOST — se esperaba un alias (legacy|app) o un hostname';
@@ -42,8 +45,8 @@ function describeCredentials(credentials: CredentialsStatus): string {
 }
 
 /**
- * Texto compacto, una línea por dato. Deliberadamente **no** incluye la ruta del fichero
- * de credenciales ni ningún valor de token.
+ * One line per fact. Deliberately excludes the credentials file path and any token value:
+ * the path leaks the operating system user name.
  */
 export function buildHealthReport(snapshot: HealthSnapshot): string {
   const lines = [
@@ -55,8 +58,8 @@ export function buildHealthReport(snapshot: HealthSnapshot): string {
 
   if (!snapshot.apiContractVerified) {
     lines.push(
-      'Estado: Fase 0 pendiente. No hay ningún endpoint verificado en docs/API.md, ' +
-        'así que las tools de datos todavía no existen.',
+      'Estado: sin contrato de API verificado. Las consultas de plantilla, mercado y liga ' +
+        'todavía no están disponibles.',
     );
   } else if (snapshot.credentials.state !== 'present') {
     lines.push('Siguiente paso: ejecuta `npx fantasy-mcp-es auth` para iniciar sesión.');

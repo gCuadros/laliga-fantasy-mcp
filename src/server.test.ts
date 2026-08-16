@@ -11,24 +11,24 @@ async function connectedClient(): Promise<Client> {
   return client;
 }
 
-describe('servidor MCP', () => {
+describe('MCP server', () => {
   let client: Client;
 
   beforeEach(async () => {
     client = await connectedClient();
   });
 
-  it('expone health_check y ninguna otra tool mientras la Fase 0 siga abierta', async () => {
+  it('exposes health_check and no other tool while the contract is unverified', async () => {
     const { tools } = await client.listTools();
     expect(tools.map((tool) => tool.name)).toEqual(['health_check']);
   });
 
-  it('marca health_check como sólo lectura y sin acceso al exterior', async () => {
+  it('marks health_check as read-only and closed-world', async () => {
     const { tools } = await client.listTools();
     expect(tools[0]?.annotations).toMatchObject({ readOnlyHint: true, openWorldHint: false });
   });
 
-  it('health_check responde texto, no JSON crudo', async () => {
+  it('answers with text, not raw JSON', async () => {
     const result = await client.callTool({ name: 'health_check' });
     const content = result.content as { type: string; text: string }[];
     expect(content).toHaveLength(1);

@@ -11,7 +11,7 @@ export default defineConfig([
     languageOptions: {
       parserOptions: {
         projectService: {
-          // `eslint.config.js` no está en el tsconfig (allowJs está desactivado).
+          // `eslint.config.js` is not part of the tsconfig (allowJs is off).
           allowDefaultProject: ['eslint.config.js'],
         },
         tsconfigRootDir: import.meta.dirname,
@@ -19,8 +19,8 @@ export default defineConfig([
     },
   },
   {
-    // `domain/` se reutilizará fuera del MCP (ver CLAUDE.md): no puede depender del
-    // protocolo. La regla la comprueba el linter, no la buena fe.
+    // `domain/` will be reused outside the MCP server, so it must not depend on the
+    // protocol. Enforced by the linter rather than by good intentions.
     files: ['src/domain/**/*.ts'],
     rules: {
       'no-restricted-imports': [
@@ -29,7 +29,7 @@ export default defineConfig([
           patterns: [
             {
               group: ['**/tools/**', '@modelcontextprotocol/*'],
-              message: 'domain/ no puede importar de tools/ ni del SDK de MCP.',
+              message: 'domain/ must not import from tools/ or from the MCP SDK.',
             },
           ],
         },

@@ -6,8 +6,8 @@ import { buildHealthReport } from '../domain/index.js';
 import { PACKAGE_NAME, PACKAGE_VERSION } from '../version.js';
 
 /**
- * Única tool de la Fase 1: dice qué versión corre, si hay credenciales y si la Fase 0
- * sigue pendiente. No toca la API.
+ * Reports which version is running, whether credentials are configured and whether the API
+ * contract has been verified. Never touches the API.
  */
 export function registerHealthCheck(server: McpServer): void {
   server.registerTool(
@@ -15,8 +15,8 @@ export function registerHealthCheck(server: McpServer): void {
     {
       title: 'Estado del servidor',
       description:
-        'Devuelve la versión del servidor, si hay credenciales configuradas y qué fase del ' +
-        'proyecto está operativa. No consulta la API de LaLiga Fantasy.',
+        'Devuelve la versión del servidor, si hay credenciales configuradas y qué consultas ' +
+        'están disponibles. No consulta la API de LaLiga Fantasy.',
       annotations: { readOnlyHint: true, openWorldHint: false },
     },
     async () => {
