@@ -1,0 +1,62 @@
+{
+  "name": "fantasy-mcp-es",
+  "version": "0.1.0",
+  "description": "Servidor MCP no oficial para consultar plantilla, mercado y liga de LaLiga Fantasy",
+  "license": "MIT",
+  "author": "Gonzalo Cuadros",
+  "type": "module",
+  "bin": {
+    "fantasy-mcp-es": "dist/cli.js"
+  },
+  "main": "dist/server.js",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist",
+    "start": "node dist/server.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "inspector": "npm run build && npx @modelcontextprotocol/inspector node dist/server.js",
+    "prepublishOnly": "npm run clean && npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "fantasy",
+    "futbol"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "@types/node": "^22.10.0",
+    "eslint": "^9.0.0",
+    "prettier": "^3.4.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0",
+    "typescript-eslint": "^8.67.0",
+    "vitest": "^4.1.10"
+  },
+  "directories": {
+    "doc": "docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github-personal:gCuadros/laliga-fantasy-mcp.git"
+  },
+  "types": "./dist/server.d.ts"
+}
