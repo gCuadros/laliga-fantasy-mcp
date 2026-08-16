@@ -4,10 +4,22 @@
  */
 
 export {
+  clearCredentials,
   credentialsPath,
   credentialsStatus,
   CREDENTIALS_DIR_NAME,
   CREDENTIALS_FILE_NAME,
+  keyPath,
+  KEY_FILE_NAME,
+  loadCredentials,
+  PASSPHRASE_ENV_VAR,
+  REQUIRED_DIR_MODE,
   REQUIRED_MODE,
+  saveCredentials,
 } from './credentials.js';
-export type { CredentialsState, CredentialsStatus } from './credentials.js';
+export type {
+  CredentialsState,
+  CredentialsStatus,
+  StoredCredentials,
+  StoreOptions,
+} from './credentials.js';
