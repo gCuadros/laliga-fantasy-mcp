@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Nothing here writes to the repository or publishes anything.
+permissions:
+  contents: read
+
+# A new push to a pull request makes the previous run pointless.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Types, lint and formatting do not depend on the Node version, so they run once
+  # instead of being repeated across the matrix.
+  check:
+    name: Types, lint and formatting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Typecheck (includes tests)
+        run: npm run typecheck
+
+      - run: npm run lint
+
+      - run: npm run format:check
+
+  test:
+    name: Build and test on Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 20 is the minimum in package.json engines; the rest guard against a newer
+        # runtime breaking the server, since `npx` runs on whatever the user has.
+        node: [20, 22, 24]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - run: npm test
+
+      # The unit tests exercise the server over an in-memory transport. This checks the
+      # thing users actually run: the built entrypoint, over real stdio. It also catches a
+      # stray `console.log`, which would corrupt the protocol stream.
+      - name: Smoke test the stdio transport
+        run: |
+          printf '%s\n' \
+            '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"ci","version":"0"}}}' \
+            '{"jsonrpc":"2.0","method":"notifications/initialized"}' \
+            '{"jsonrpc":"2.0","id":2,"method":"tools/list"}' \
+            | node dist/server.js > tools.json
+          grep -q '"health_check"' tools.json || {
+            echo 'health_check missing from tools/list:'; cat tools.json; exit 1;
+          }
+
+      # `npx fantasy-mcp-es` is the documented way to install this, so the packaged
+      # artefact is verified rather than assumed.
+      - name: Verify the published package exposes a working bin
+        run: |
+          npm pack --silent --pack-destination "$RUNNER_TEMP"
+          cd "$RUNNER_TEMP"
+          npm install --no-save ./fantasy-mcp-es-*.tgz
+          ./node_modules/.bin/fantasy-mcp-es --version
