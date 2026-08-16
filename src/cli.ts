@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 /**
- * Entrypoint del paquete. Sin argumentos arranca el servidor MCP por stdio, que es lo que
- * hace Claude Desktop al lanzar `npx fantasy-mcp-es`.
+ * Package entrypoint. With no arguments it starts the MCP server over stdio, which is what
+ * Claude Desktop does when it runs `npx fantasy-mcp-es`.
  */
 
 import { startServer } from './server.js';
@@ -12,7 +12,7 @@ const USAGE = `${PACKAGE_NAME} v${PACKAGE_VERSION}
 
 Uso:
   ${PACKAGE_NAME}              arranca el servidor MCP por stdio
-  ${PACKAGE_NAME} auth         inicia sesión en LaLiga Fantasy (Fase 2, aún no disponible)
+  ${PACKAGE_NAME} auth         inicia sesión en LaLiga Fantasy (todavía no disponible)
   ${PACKAGE_NAME} --version    imprime la versión
   ${PACKAGE_NAME} --help       muestra esta ayuda
 
@@ -40,8 +40,8 @@ async function main(argv: readonly string[]): Promise<number> {
 
     case 'auth':
       process.stderr.write(
-        'El comando `auth` llega en la Fase 2. El flujo OAuth2 + PKCE contra el B2C de ' +
-          'LaLiga está bloqueado hasta que docs/API.md documente sus endpoints.\n',
+        'El comando `auth` todavía no está disponible: el inicio de sesión con LaLiga aún ' +
+          'no está implementado.\n',
       );
       return 1;
 
@@ -53,7 +53,7 @@ async function main(argv: readonly string[]): Promise<number> {
 
 main(process.argv.slice(2))
   .then((code) => {
-    // El servidor stdio no termina: sólo se fija el código cuando main resuelve.
+    // The stdio server never resolves; the exit code is only set for the other commands.
     process.exitCode = code;
   })
   .catch((error: unknown) => {

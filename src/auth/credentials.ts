@@ -1,9 +1,9 @@
 /**
- * Ubicación y estado del fichero de credenciales.
+ * Location and state of the credentials file.
  *
- * El flujo OAuth2 + PKCE contra el B2C de LaLiga es la Fase 2. Aquí sólo se comprueba si
- * el fichero existe y si sus permisos son seguros: **nunca se lee su contenido**, para que
- * ningún token pueda acabar en un log o en la respuesta de una tool.
+ * The OAuth2 + PKCE flow against LaLiga's B2C tenant is not implemented yet. This module
+ * only checks whether the file exists and whether its permissions are safe: **it never
+ * reads the contents**, so no token can end up in a log or in a tool response.
  */
 
 import { stat } from 'node:fs/promises';
@@ -13,7 +13,7 @@ import { join } from 'node:path';
 export const CREDENTIALS_DIR_NAME = '.fantasy-mcp-es';
 export const CREDENTIALS_FILE_NAME = 'credentials.json';
 
-/** Permisos exigidos: sólo el propietario puede leer/escribir. */
+/** Required permissions: owner read/write only. */
 export const REQUIRED_MODE = 0o600;
 
 export function credentialsPath(home: string = homedir()): string {
@@ -24,7 +24,7 @@ export type CredentialsState = 'missing' | 'insecure-permissions' | 'present';
 
 export interface CredentialsStatus {
   readonly state: CredentialsState;
-  /** Presente sólo si los permisos son laxos, para poder decir qué hay que corregir. */
+  /** Only set when permissions are too broad, so we can say what needs fixing. */
   readonly mode?: string;
 }
 
@@ -38,8 +38,8 @@ function isNotFound(error: unknown): boolean {
 }
 
 /**
- * Estado del fichero de credenciales. No lanza si falta: la ausencia es un estado normal
- * (nadie ha ejecutado `auth` todavía).
+ * State of the credentials file. Does not throw when it is missing: that is a normal state
+ * (nobody has run `auth` yet).
  */
 export async function credentialsStatus(home: string = homedir()): Promise<CredentialsStatus> {
   try {
@@ -47,7 +47,7 @@ export async function credentialsStatus(home: string = homedir()): Promise<Crede
     if (!info.isFile()) {
       return { state: 'missing' };
     }
-    // En Windows los bits POSIX no son significativos: comprobarlos daría un falso positivo.
+    // POSIX mode bits are not meaningful on Windows; checking them would false-positive.
     if (process.platform !== 'win32') {
       const permissions = info.mode & 0o777;
       if ((permissions & ~REQUIRED_MODE) !== 0) {

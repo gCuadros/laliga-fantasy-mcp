@@ -8,8 +8,8 @@ interface PackageManifest {
 }
 
 function readManifest(): PackageManifest {
-  // Resuelve tanto desde `src/` (tsx) como desde `dist/` (compilado): en ambos
-  // casos el package.json queda un nivel por encima.
+  // Resolves both from `src/` (tsx) and from `dist/` (compiled): in both cases the
+  // package.json sits one level up.
   const raw: unknown = require('../package.json');
   if (
     typeof raw !== 'object' ||
@@ -17,7 +17,7 @@ function readManifest(): PackageManifest {
     typeof (raw as PackageManifest).name !== 'string' ||
     typeof (raw as PackageManifest).version !== 'string'
   ) {
-    throw new Error('package.json ilegible: faltan `name` o `version`');
+    throw new Error('Unreadable package.json: `name` or `version` is missing');
   }
   return raw as PackageManifest;
 }

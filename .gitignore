@@ -1,4 +1,3 @@
-.tokensave
 node_modules
 dist
 coverage
@@ -6,3 +5,12 @@ coverage
 .DS_Store
 .env
 .env.*
+.tokensave
+
+# Local working context — never committed. See AGENTS.md section 2.
+PLAN.local.md
+STATUS.local.md
+
+# .claude/settings.json is shared; per-machine overrides are not.
+.claude/settings.local.json
+.claude/.headroom_wrap_marker.json

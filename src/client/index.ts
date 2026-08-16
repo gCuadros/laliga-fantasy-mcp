@@ -1,8 +1,8 @@
 /**
- * Cliente HTTP tipado, rate limiting y cache con TTL: Fase 3.
+ * Typed HTTP client, rate limiting and TTL cache.
  *
- * No puede existir hasta que `docs/API.md` documente endpoints reales, así que de momento
- * este módulo sólo expone configuración.
+ * None of that can exist until `docs/API.md` documents real endpoints, so for now this
+ * module only exposes configuration.
  */
 
 export {

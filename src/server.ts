@@ -20,13 +20,13 @@ export function createServer(): McpServer {
 }
 
 /**
- * Arranca el transporte stdio. Nada puede escribir en stdout: es el canal del protocolo.
- * Todo log va a stderr.
+ * Starts the stdio transport. Nothing may write to stdout: that is the protocol channel.
+ * Every log goes to stderr.
  */
 export async function startServer(): Promise<void> {
   const server = createServer();
   await server.connect(new StdioServerTransport());
-  process.stderr.write(`${PACKAGE_NAME} v${PACKAGE_VERSION} escuchando en stdio\n`);
+  process.stderr.write(`${PACKAGE_NAME} v${PACKAGE_VERSION} listening on stdio\n`);
 }
 
 const entrypoint = process.argv[1];
@@ -36,7 +36,7 @@ const invokedDirectly =
 if (invokedDirectly) {
   startServer().catch((error: unknown) => {
     const detail = error instanceof Error ? error.message : String(error);
-    process.stderr.write(`Error al arrancar: ${detail}\n`);
+    process.stderr.write(`Failed to start: ${detail}\n`);
     process.exitCode = 1;
   });
 }

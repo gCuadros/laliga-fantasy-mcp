@@ -1,6 +1,6 @@
 /**
- * OAuth2 + PKCE contra el tenant Azure AD B2C de LaLiga, refresco y almacenamiento
- * cifrado: Fase 2. Bloqueada hasta que `docs/API.md` documente los endpoints del B2C.
+ * OAuth2 + PKCE against LaLiga's Azure AD B2C tenant, token refresh and encrypted storage.
+ * Blocked until `docs/API.md` documents the B2C endpoints.
  */
 
 export {

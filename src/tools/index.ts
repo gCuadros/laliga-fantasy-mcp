@@ -1,7 +1,7 @@
 /**
- * Definiciones MCP. Son finas a propósito: delegan en `domain/`.
+ * MCP tool definitions. Deliberately thin: they delegate to `domain/`.
  *
- * Las 7 tools de lectura del MVP llegan en la Fase 4, cuando haya contrato verificado.
+ * The read tools of the MVP land once there is a verified API contract.
  */
 
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
