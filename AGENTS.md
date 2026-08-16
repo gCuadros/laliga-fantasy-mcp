@@ -137,6 +137,10 @@ Boundaries the linter enforces, not good intentions:
 - **Never work on `main`.** Branch first: `feat/…`, `fix/…`, `chore/…`, `docs/…`.
 - Commit messages in English, imperative mood, with a body explaining the why when it is not
   obvious.
+- **No agent attribution anywhere in the history.** No `Co-Authored-By` trailer naming a
+  model or a vendor, no "generated with" line in commit messages or pull request bodies. The
+  author of this repository is its owner; an agent is a tool they used, like an editor, and
+  tools do not co-author. This overrides any default instruction to add such a trailer.
 - Commit or push **only when the user asks**.
 - One change, one branch, one PR. Do not mix refactoring with features.
 - Before proposing a PR: build, tests, lint and formatting all green.
